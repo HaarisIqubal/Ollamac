@@ -47,7 +47,7 @@ final class ChatViewModel {
         }
     }
     
-    var filterdChats: [Chat] {
+    var filteredChats: [Chat] {
         guard !searchChatQuery.isEmpty else {
             return chats
         }

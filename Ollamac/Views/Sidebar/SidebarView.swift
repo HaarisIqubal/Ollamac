@@ -18,7 +18,7 @@ struct SidebarView: View {
     private var todayChats: [Chat] {
         let calendar = Calendar.current
         
-        return chatViewModel.filterdChats
+        return chatViewModel.filteredChats
             .filter { calendar.isDateInToday($0.modifiedAt) }
             .sorted { $0.modifiedAt > $1.modifiedAt }
     }
@@ -26,7 +26,7 @@ struct SidebarView: View {
     private var yesterdayChats: [Chat] {
         let calendar = Calendar.current
         
-        return chatViewModel.filterdChats
+        return chatViewModel.filteredChats
             .filter { calendar.isDateInYesterday($0.modifiedAt) }
             .sorted { $0.modifiedAt > $1.modifiedAt }
     }
@@ -35,7 +35,7 @@ struct SidebarView: View {
         let calendar = Calendar.current
         let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: Date()) ?? Date()
         
-        return chatViewModel.filterdChats
+        return chatViewModel.filteredChats
             .filter { $0.modifiedAt < calendar.startOfDay(for: twoDaysAgo) }
             .sorted { $0.modifiedAt > $1.modifiedAt }
     }
