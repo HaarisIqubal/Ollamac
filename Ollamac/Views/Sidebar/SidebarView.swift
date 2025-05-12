@@ -13,10 +13,12 @@ struct SidebarView: View {
     @Environment(ChatViewModel.self) private var chatViewModel
     @Environment(MessageViewModel.self) private var messageViewModel
     
+    @State private var searchText: String = ""
+    
     private var todayChats: [Chat] {
         let calendar = Calendar.current
         
-        return chatViewModel.chats
+        return chatViewModel.filterdChats
             .filter { calendar.isDateInToday($0.modifiedAt) }
             .sorted { $0.modifiedAt > $1.modifiedAt }
     }
@@ -24,7 +26,7 @@ struct SidebarView: View {
     private var yesterdayChats: [Chat] {
         let calendar = Calendar.current
         
-        return chatViewModel.chats
+        return chatViewModel.filterdChats
             .filter { calendar.isDateInYesterday($0.modifiedAt) }
             .sorted { $0.modifiedAt > $1.modifiedAt }
     }
@@ -33,7 +35,7 @@ struct SidebarView: View {
         let calendar = Calendar.current
         let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: Date()) ?? Date()
         
-        return chatViewModel.chats
+        return chatViewModel.filterdChats
             .filter { $0.modifiedAt < calendar.startOfDay(for: twoDaysAgo) }
             .sorted { $0.modifiedAt > $1.modifiedAt }
     }
@@ -83,6 +85,7 @@ struct SidebarView: View {
             .hide(if: previousDaysChats.isEmpty, removeCompletely: true)
         }
         .listStyle(.sidebar)
+        .searchable(text: $chatViewModelBindable.searchChatQuery, placement: .sidebar, prompt: "Search")
         .toolbar {
             SidebarToolbarContent {
                 chatViewModel.create(model: Defaults[.defaultModel])

@@ -23,6 +23,8 @@ final class ChatViewModel {
     var selectedChats = Set<Chat>()
 
     var shouldFocusPrompt = false
+    
+    var searchChatQuery = ""
 
     var isHostReachable: Bool = true
     var loading: ChatViewModelLoading? = nil
@@ -42,6 +44,16 @@ final class ChatViewModel {
         
         set {
             _chatNameTemp = newValue
+        }
+    }
+    
+    var filterdChats: [Chat] {
+        guard !searchChatQuery.isEmpty else {
+            return chats
+        }
+        return chats.filter { chat in
+            chat.name.localizedCaseInsensitiveContains(searchChatQuery) ||
+            chat.messages.contains(where: { $0.prompt.localizedCaseInsensitiveContains(searchChatQuery) })
         }
     }
     
